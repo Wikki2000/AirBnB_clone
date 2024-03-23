@@ -2,6 +2,7 @@
 """This module models a base class of the AirBnb clone project"""
 from datetime import datetime
 from uuid import uuid4
+from models import storage
 
 
 class BaseModel:
@@ -21,6 +22,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.updated_at = datetime.now()
             self.created_at = datetime.now()
+            storage.new(self)
         else:
             for key, value in kwargs.items():
                 if key != '__class__':
@@ -35,6 +37,7 @@ class BaseModel:
     def save(self):
         """This method update time were the instance of the object is save"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """This method returns dict containing all keys/values of __dict__"""
