@@ -55,9 +55,8 @@ class FileStorage:
             with open(FileStorage.__file_path, "r") as file:
                 json_str = file.read()
 
-            from models.base_model import BaseModel
+            # from models.base_model import BaseModel
             obj_dict = loads(json_str)
             for key, value in obj_dict.items():
-                if value['__class__'] == "BaseModel":
-                    obj = BaseModel(**value)
+                obj = BaseModel(**value)
                 FileStorage.__objects[key] = obj
