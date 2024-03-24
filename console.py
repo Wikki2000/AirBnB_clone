@@ -5,7 +5,7 @@ import cmd
 
 class HBNBCommand(cmd.Cmd):
     """This is a subclass for command interpreter"""
-    prompt = '(hbnb)'
+    prompt = '(hbnb) '
 
     def do_quit(self, args):
         """This method use to quit program"""
