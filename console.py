@@ -19,7 +19,6 @@ class HBNBCommand(cmd.Cmd):
         """Print "**class name missing **", if class name is not given"""
         print("** class name missing **")
 
-    @staticmethod
     def do_quit(self, args):
         """Quit command to exit the program"""
         return True
