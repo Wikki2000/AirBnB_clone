@@ -90,6 +90,9 @@ class HBNBCommand(cmd.Cmd):
             class_name = args_list[0]
             instance_id = args_list[1]
             obj_class = HBNBCommand.__obj_dict[class_name]
+
+            # To avoid error flag when resizing an iterable 
+            # Iterate through it copy
             for key, obj in obj_storage.copy().items():
                 if isinstance(obj, obj_class) and obj.id == instance_id:
                     del obj_storage[key]
