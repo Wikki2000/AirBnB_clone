@@ -2,6 +2,7 @@
 """console.py - Entry point of the HBNB command interpreter"""
 import cmd
 from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,6 +20,16 @@ class HBNBCommand(cmd.Cmd):
         """Print "**class name missing **", if class name is not given"""
         print("** class name missing **")
 
+    @staticmethod
+    def invalid_instance():
+        """ print no instance found """
+        print("** no instance found **")
+
+    @staticmethod
+    def missing_id():
+        """ print instance id is missing message """
+        print("** instance id missing **")
+
     def do_quit(self, args):
         """Quit command to exit the program"""
         return True
@@ -28,24 +39,31 @@ class HBNBCommand(cmd.Cmd):
         print("")  # Print a newline before exiting
         return True
 
-    def emptyline(self):
-        """Do nothing on empty line (pressing ENTER)"""
-        pass
-
-    def do_create(self, class_name):
-        """Create instance of a class"""
-        class_list = [BaseModel, User]
-        if class_list == "":
+    def do_create(self, arg):
+        """Create an instance of BaseModel """
+        obj_dict = {
+                "BaseModel": BaseModel,
+                }
+        if len(arg) == 0: # Alternatively: arg == ""
             self.missing_name()
-        elif class_name not in class_list:
+        elif arg not in obj_dict:
             self.wrong_class()
         else:
-            # Retrieve the index number of given class in class_list
-            # Using this index to get the class so as to create an instance
-            class_index = class_list.index(class_name)
-            obj_instance = class_name[class_index]()
-            obj_instance.save()
-            print(obj_instance.id)
+            obj = obj_dict[arg]()
+            obj.save()
+            print(obj.id)
+
+    def do_show(self, args):
+        """show an instance of a class"""
+        obj_dict = {
+                "BaseModel": BaseModel,
+                }
+        obj_storage = storage.all()
+        args_list = args.split()
+        if len(args_list) == 0:
+            self.missing_name()
+        elif args_list[0] not in obj_dict:
+            self.wrong_class()
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

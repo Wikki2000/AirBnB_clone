@@ -34,7 +34,7 @@ class FileStorage:
         obj_dict = {}
 
         # Add the class name and convert datetime to isoformat str
-        #Using 'to_dict)' method in base_model class
+        # Using 'to_dict' method in base_model class
         for key, obj in FileStorage.__objects.items():
             obj_dict[key] = obj.to_dict()
 
@@ -49,14 +49,15 @@ class FileStorage:
             (__file_path) exists ; otherwise, do nothing. If the file doesn’t
             exist, no exception should be raised)
         """
+        # Import here to avoid circular import
         from models.base_model import BaseModel
         if exists(FileStorage.__file_path):
             json_str = ""
             with open(FileStorage.__file_path, "r") as file:
                 json_str = file.read()
+            obj_dicts = loads(json_str)
 
-            # from models.base_model import BaseModel
-            obj_dict = loads(json_str)
-            for key, value in obj_dict.items():
+            # Convert obj_dict back to object
+            for key, value in obj_dicts.items():
                 obj = BaseModel(**value)
                 FileStorage.__objects[key] = obj
