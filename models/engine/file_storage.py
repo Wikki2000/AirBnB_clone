@@ -13,7 +13,7 @@ class FileStorage:
         __file_path: string - path to the JSON file
     """
     __objects = {}
-    __file_path = 'store_json.json'
+    __file_path = 'file.json'
     def all(self):
         """Returns the dictionary __objects"""
         return FileStorage.__objects

@@ -7,7 +7,9 @@ from models import storage
 
 class HBNBCommand(cmd.Cmd):
     """This class defines the command interpreter"""
-
+    __obj_dict = {
+            "BaseModel": BaseModel,
+            }
     prompt = "(hbnb) "
 
     @staticmethod
@@ -41,30 +43,59 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Create an instance of BaseModel """
-        obj_dict = {
-                "BaseModel": BaseModel,
-                }
         if len(arg) == 0: # Alternatively: arg == ""
             self.missing_name()
-        elif arg not in obj_dict:
+        elif arg not in HBNBCommand.__obj_dict:
             self.wrong_class()
         else:
-            obj = obj_dict[arg]()
+            obj = HBNBCommand.__obj_dict[arg]()
             obj.save()
             print(obj.id)
 
     def do_show(self, args):
-        """show an instance of a class"""
-        obj_dict = {
-                "BaseModel": BaseModel,
-                }
+        """Prints the string representation of an instance based on the class name and id"""
         obj_storage = storage.all()
         args_list = args.split()
         if len(args_list) == 0:
             self.missing_name()
-        elif args_list[0] not in obj_dict:
+        elif args_list[0] not in HBNBCommand.__obj_dict:
             self.wrong_class()
+        elif args_list[0] in HBNBCommand.__obj_dict and len(args_list) != 2:
+            self.missing_id()
+        else:
+            class_name = args_list[0]  # Get the class name from args_list
+            instance_id = args_list[1]  # Get the instance ID from args_list
+            obj_class = HBNBCommand.__obj_dict[class_name]  # Get the class from obj_dict using the class name
 
+            for key, obj in obj_storage.items():
+                if isinstance(obj, obj_class) and obj.id == instance_id:
+                    print(obj)
+                    break
+                else:
+                    self.invalid_instance()
+
+    def do_destroy(self, args):
+        """Deletes an instance based on 
+        the class name and id (save the change into the JSON file)
+        """
+        obj_storage = storage.all()
+        args_list = args.split()
+        if len(args_list) == 0:
+            self.missing_name()
+        elif args_list[0] not in HBNBCommand.__obj_dict:
+            self.wrong_class()
+        elif args_list[0] in HBNBCommand.__obj_dict and len(args_list) != 2:
+            self.missing_id()
+        else:
+            class_name = args_list[0]
+            instance_id = args_list[1]
+            obj_class = HBNBCommand.__obj_dict[class_name]
+            for key, obj in obj_storage.copy().items():
+                if isinstance(obj, obj_class) and obj.id == instance_id:
+                    del obj_storage[key]
+                    storage.save()
+                    break
+                else:
+                    self.invalid_instance()
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
-
