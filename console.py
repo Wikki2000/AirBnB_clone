@@ -8,8 +8,8 @@ from models import storage
 class HBNBCommand(cmd.Cmd):
     """This class defines the command interpreter"""
     __obj_dict = {
-            "BaseModel": BaseModel,
-            }
+        "BaseModel": BaseModel,
+        }
     prompt = "(hbnb) "
 
     @staticmethod
@@ -31,7 +31,7 @@ class HBNBCommand(cmd.Cmd):
     def missing_id():
         """ print instance id is missing message """
         print("** instance id missing **")
-
+        
     @staticmethod
     def class_name(args):
         """Retrieve class name"""
@@ -39,8 +39,8 @@ class HBNBCommand(cmd.Cmd):
         class_name = args_list[0]  # Get the class name from args_list
         obj_class = HBNBCommand.__obj_dict[class_name]  # Get the class from obj_dict using the class name
         return obj_class
-
-
+        
+        
 
     def do_quit(self, args):
         """Quit command to exit the program"""
@@ -75,14 +75,14 @@ class HBNBCommand(cmd.Cmd):
         else:
             instance_id = args_list[1]  # Get the instance ID from args_list
             obj_class = self.class_name(args)
-
+            
             for key, obj in obj_storage.items():
                 if isinstance(obj, obj_class) and obj.id == instance_id:
                     print(obj)
                     break
                 else:
                     self.invalid_instance()
-
+    
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id (save the change into the JSON file)"""
         obj_storage = storage.all()
@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
                     break
                 else:
                     self.invalid_instance()
-
+    
     def do_all(self, args):
         obj_storage = storage.all()
         """Print a list of all string rep. of all instances based or not on class name"""
@@ -122,24 +122,24 @@ class HBNBCommand(cmd.Cmd):
             for key, obj in obj_storage.items():
                 obj_list.append(str(obj))
             print(obj_list)
-
+    
     def do_update(self, args):
         """Update an attribute of a class"""
         obj_storage = storage.all()
         args_list = args.split()
         if len(args_list) == 0:
             self.missing_name()
-        elif len(args_list) == 1 and args_list[0] not in HBNBCommand.__obj_dict:
+        elif args_list[0] not in HBNBCommand.__obj_dict:
             self.wrong_class()
         elif args_list[0] in HBNBCommand.__obj_dict:
             if len(args_list) == 1:
                 self.missing_id()
             elif len(args_list) == 2:
-                print("** attribute name missing **")
+                    print("** attribute name missing **")
             elif len(args_list) == 3:
                 print("** value missing **")
             elif len(args_list) == 4:
-
+                
                 # Check for invalid object id
                 obj_class = self.class_name(args)
                 instance_id = args_list[1]
