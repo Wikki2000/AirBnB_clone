@@ -2,6 +2,7 @@
 """console.py - Entry point of the HBNB command interpreter"""
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -9,6 +10,7 @@ class HBNBCommand(cmd.Cmd):
     """This class defines the command interpreter"""
     __obj_dict = {
         "BaseModel": BaseModel,
+        "User": User,
         }
     prompt = "(hbnb) "
 

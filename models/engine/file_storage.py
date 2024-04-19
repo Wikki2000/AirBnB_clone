@@ -51,13 +51,19 @@ class FileStorage:
         """
         # Import here to avoid circular import
         from models.base_model import BaseModel
+        from models.user import User
+        
         if exists(FileStorage.__file_path):
             json_str = ""
             with open(FileStorage.__file_path, "r") as file:
                 json_str = file.read()
-            obj_dicts = loads(json_str)
+            obj_dict_store = loads(json_str)
 
             # Convert obj_dict back to object
-            for key, value in obj_dicts.items():
-                obj = BaseModel(**value)
+            for key, obj_dict in obj_dict_store.items():
+                if obj_dict["__class__"] == "BaseModel":
+                    obj = BaseModel(**obj_dict)
+                elif obj_dict["__class__"] == "Users":
+                    obj = User(**obj_dict)
+                    
                 FileStorage.__objects[key] = obj
