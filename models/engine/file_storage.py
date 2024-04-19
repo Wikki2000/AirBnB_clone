@@ -63,7 +63,7 @@ class FileStorage:
             for key, obj_dict in obj_dict_store.items():
                 if obj_dict["__class__"] == "BaseModel":
                     obj = BaseModel(**obj_dict)
-                elif obj_dict["__class__"] == "Users":
+                elif obj_dict["__class__"] == "User":
                     obj = User(**obj_dict)
                     
                 FileStorage.__objects[key] = obj
