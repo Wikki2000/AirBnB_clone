@@ -147,7 +147,7 @@ class HBNBCommand(cmd.Cmd):
                 instance_id = args_list[1]
                 for key, obj in obj_storage.items():
                     if isinstance(obj, obj_class) and obj.id == instance_id:
-                        setattr(obj, args_list[3], args_list[3])
+                        setattr(obj, args_list[3], args_list[4])
                         break
                 else:
                     self.invalid_instance()
