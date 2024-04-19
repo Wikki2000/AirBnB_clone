@@ -2,6 +2,11 @@
 """console.py - Entry point of the HBNB command interpreter"""
 import cmd
 from models.base_model import BaseModel
+from models.state import State
+from models.review import Review
+from models.amenity import Amenity
+from models.place import Place
+from models.city import City
 from models.user import User
 from models import storage
 
@@ -11,6 +16,11 @@ class HBNBCommand(cmd.Cmd):
     __obj_dict = {
         "BaseModel": BaseModel,
         "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
         }
     prompt = "(hbnb) "
 
@@ -147,7 +157,7 @@ class HBNBCommand(cmd.Cmd):
                 instance_id = args_list[1]
                 for key, obj in obj_storage.items():
                     if isinstance(obj, obj_class) and obj.id == instance_id:
-                        setattr(obj, args_list[3], args_list[4])
+                        setattr(obj, args_list[2], args_list[3])
                         break
                 else:
                     self.invalid_instance()
