@@ -52,7 +52,12 @@ class FileStorage:
         # Import here to avoid circular import
         from models.base_model import BaseModel
         from models.user import User
-        
+        from models.state import State
+        from models.review import Review
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.city import City
+
         if exists(FileStorage.__file_path):
             json_str = ""
             with open(FileStorage.__file_path, "r") as file:
@@ -65,5 +70,13 @@ class FileStorage:
                     obj = BaseModel(**obj_dict)
                 elif obj_dict["__class__"] == "User":
                     obj = User(**obj_dict)
-                    
+                elif obj_dict["__class__"] == "Place":
+                    obj = BaseModel(**obj_dict)
+                elif obj_dict["__class__"] == "Review":
+                    obj = BaseModel(**obj_dict)
+                elif obj_dict["__class__"] == "State":
+                    obj = BaseModel(**obj_dict)
+                elif obj_dict["__class__"] == "Amenity":
+                    obj = BaseModel(**obj_dict)
+
                 FileStorage.__objects[key] = obj
