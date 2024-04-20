@@ -14,14 +14,14 @@ from models import storage
 class HBNBCommand(cmd.Cmd):
     """This class defines the command interpreter"""
     __obj_dict = {
-        "BaseModel": BaseModel,
-        "User": User,
-        "State": State,
-        "City": City,
-        "Amenity": Amenity,
-        "Place": Place,
-        "Review": Review
-        }
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review
+            }
     prompt = "(hbnb) "
 
     @staticmethod
@@ -43,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
     def missing_id():
         """ print instance id is missing message """
         print("** instance id missing **")
-        
+
     @staticmethod
     def class_name(args):
         """Retrieve class name"""
@@ -51,8 +51,8 @@ class HBNBCommand(cmd.Cmd):
         class_name = args_list[0]  # Get the class name from args_list
         obj_class = HBNBCommand.__obj_dict[class_name]  # Get the class from obj_dict using the class name
         return obj_class
-        
-        
+
+
 
     def do_quit(self, args):
         """Quit command to exit the program"""
@@ -75,7 +75,15 @@ class HBNBCommand(cmd.Cmd):
             print(obj.id)
 
     def do_show(self, args):
-        """Prints the string representation of an instance based on the class name and id"""
+        """
+        Prints the string representation of an object given class name and id
+
+        Args:
+            args (string): The arguement is enter as a string using the format:
+                "<class name> <class id>"
+                - <class name>: The class name
+                - <instance id>: The id of an instance of the class
+        """
         obj_storage = storage.all()
         args_list = args.split()
         if len(args_list) == 0:
@@ -87,16 +95,33 @@ class HBNBCommand(cmd.Cmd):
         else:
             instance_id = args_list[1]  # Get the instance ID from args_list
             obj_class = self.class_name(args)
-            
+
             for key, obj in obj_storage.items():
                 if isinstance(obj, obj_class) and obj.id == instance_id:
                     print(obj)
                     break
                 else:
                     self.invalid_instance()
-    
+
     def do_destroy(self, args):
-        """Deletes an instance based on the class name and id (save the change into the JSON file)"""
+        """
+        Deletes an instance based on the class name and id.
+
+        Args:
+            args (string): The arguement is enter as string using the format:
+                <class name> <instance id>
+                - <class name>: The name of the class
+                - <instance id>: The id of an instance of the class
+
+        After deletion, the instances and remove and changes is save to the file
+
+        Usage: 
+            Enter below in the console:
+                destroy <class name> <instance id>
+        Examle:
+            Enter the command in the console:
+               >>> destroy BaseModel 1234-1234-1234
+        """
         obj_storage = storage.all()
         args_list = args.split()
         if len(args_list) == 0:
@@ -115,10 +140,22 @@ class HBNBCommand(cmd.Cmd):
                     break
                 else:
                     self.invalid_instance()
-    
+
     def do_all(self, args):
         obj_storage = storage.all()
-        """Print a list of all string rep. of all instances based or not on class name"""
+        """
+        Print a list of all string representation of all instances
+        based or not on class name
+
+        Args:
+            args (string): An optional arguement <class name> is enter or can be ignore
+                - <class name>: The name of the class
+
+        Usage:
+            With Args: all <class name>
+            With no Args: all
+
+        """
         obj_list = []
         args_list = args.split()
         if len(args_list) == 1:
@@ -134,9 +171,23 @@ class HBNBCommand(cmd.Cmd):
             for key, obj in obj_storage.items():
                 obj_list.append(str(obj))
             print(obj_list)
-    
+
     def do_update(self, args):
-        """Update an attribute of a class"""
+        """
+        Update an attribute of a class instance.
+
+        Args:
+            args (str): The arguments should be in the format 
+                <class name> <id> <attribute name> "<attribute value>.
+
+                - <class name>: The name of the class.
+                - <id>: The ID of the instance to update.
+                - <attribute name>: The name of the attribute to update.
+                - <attribute value>": The new value of the attribute, enclosed in double quotes.
+
+        Example:
+            update User 12345 email "example@example.com"
+        """
         obj_storage = storage.all()
         args_list = args.split()
         if len(args_list) == 0:
@@ -147,11 +198,11 @@ class HBNBCommand(cmd.Cmd):
             if len(args_list) == 1:
                 self.missing_id()
             elif len(args_list) == 2:
-                    print("** attribute name missing **")
+                print("** attribute name missing **")
             elif len(args_list) == 3:
                 print("** value missing **")
             elif len(args_list) == 4:
-                
+
                 # Check for invalid object id
                 obj_class = self.class_name(args)
                 instance_id = args_list[1]
@@ -163,6 +214,29 @@ class HBNBCommand(cmd.Cmd):
                     self.invalid_instance()
             else:
                 print("** number of arguments exceeded **")
+
+    def do_count(self, args):
+        """"
+        count number of instance of a class that appear in the json file
+
+        Args:
+            args (string): Class name
+        """
+        obj_storage = storage.all()
+        count = 0
+        if not args:
+            self.missing_name()
+            return
+        try:
+            obj_class =  HBNBCommand.__obj_dict[args]
+            for key, obj in obj_storage.items():
+                if isinstance(obj, obj_class):
+                    count += 1
+            else:
+                print(count)
+        except KeyError:
+            print("Invalid class name")
+            return
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
